@@ -1,4 +1,3 @@
-Website
-=======
+Website for selecting and downloading vocabularies
+==================================================
 
-Tools and features outside the Woldpress content management
