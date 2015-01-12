@@ -1,0 +1,721 @@
+/* 
+    Document   : style    
+    Author     : vkolchenko
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+/*except tables
+
+
+*/
+div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+ caption  {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+
+html {height: 100%; margin: 0; padding: 0; font: 12px/14px Arial; }
+body {margin: 0 auto; padding: 0; height: 95%; font-size: 12px; line-height: 1; }   
+    
+
+table, tfoot, tbody, thead, tr, th, td
+{
+    border: 0;
+    outline: 0;
+}
+
+
+
+TD {
+  font-size: 10pt; 
+  font-family: verdana,helvetica;
+  text-decoration: none;
+  white-space:nowrap;
+}
+
+A {
+  text-decoration: underline;
+  color: #7474A8;
+}
+
+select {
+ border: 1px solid;
+ font: 11px/11px Arial;
+ margin: 0;
+ padding: 0;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table
+{
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+table.registration td
+{  
+    font-family: sans-serif;
+    padding-bottom: 0.5em;
+    padding-top: 0em;    
+}
+table.registration td input[type=radio] {
+	vertical-align: top;
+        margin: 0;
+	padding: 0;
+}
+table.registration td label {
+	vertical-align: top;
+}
+table.registration td input.error
+{
+    border-color: #FF0000;
+}
+
+.error, .asterisk
+{
+    color: #FF0000;
+    width: 3px;
+}
+
+#header_line {
+	background:url("/download/view/images/container_top.gif") no-repeat;
+	border-top:1px solid #696796;
+	margin:0 auto;
+	height:5px;
+	width:1180px;
+}
+#headerdownload
+{
+    text-align: center;
+    border-bottom: 2px solid #696796;
+    height: 55px;
+    margin: 0 auto;
+    padding: 0;
+    width: 1180px;
+}
+
+#headerdownload div.head_block_small {
+border-left: 1px solid #474747;
+height: 45px;
+margin: 5px 0;
+padding: 0;
+width: 513px;
+float: right;
+text-align: right;
+}
+
+#headerdownload div.head_block_big {
+border-left: 1px solid #474747;
+height: 45px;
+margin: 5px 0;
+padding: 0;
+width: 150px;
+float: right;
+}
+
+#headerdownload div.head_block_big a {
+line-height: 100%;
+font-weight: bold;
+font-family: Arial;
+font-size: 36px;
+line-height: 29px;
+text-decoration: none;
+color: #003f84;
+}
+
+#headerdownload div.head_block_big h1 {
+font-size: 16px;
+margin: 2px 0 0 0;
+}
+
+#headerdownload div.logo {
+float: right;
+}
+
+#headerdownload div.logo img {
+height: 52px;
+margin: 2px 20px 0 0;
+display: block;
+}
+
+#headerdownload .user-block {
+	border-left:1px solid #474747;
+	float:right;
+	height:45px;
+	margin:5px 0;
+	padding:0 415px 0 0;
+	text-align:right;
+	width:100px;
+}
+#headerdownload .user-block p {
+	color:#000000;
+	font-size:10px;
+	margin:5px 20px 0 8px;
+	padding:0;
+	text-decoration:underline;
+	white-space:nowrap;
+}
+#headerdownload .omop-block {
+	text-align: center;
+	border-left:1px solid #474747;
+	float:right;
+	height:45px;
+	margin:5px 0;
+	padding:0;
+	width:150px;
+}
+#headerdownload .omop-block h1 {
+	font-size:16px;
+	margin:2px 0 0;
+}
+.page_title {
+	background:url("/download/view/images/top_line.gif") repeat-x;
+	color:#FFFFFF;
+	font-size:18px;
+	font-weight:normal;
+	line-height:30px;
+	margin:0;
+	text-align:center;
+	text-transform:uppercase;
+}
+.page_title a {
+	color:white;
+	text-decoration:underline;
+}
+
+div.setup-form
+{
+    font-family: sans-serif;
+    font-size: 1em;
+    margin: 0px auto;
+    padding-top: 10px;  
+    width: 500px;
+}
+
+div.success {
+    font-family: sans-serif;
+    font-size: 1em;
+    margin: 0px auto;
+    padding-top: 10px;  
+    width: 500px;
+    align: center;
+}
+
+div.setup-form p
+{
+   line-height: 15px;
+}
+ 
+div.setup-form h2
+{
+    font-family: sans-serif;    
+    font-size: 2em;
+    text-align: center;
+    margin: 0px auto;
+    padding-top: 10px;
+}
+
+h3
+{
+    font-family: sans-serif;
+    text-align:center;
+    padding-top: 0px;    
+    padding-bottom: 20px;
+}
+
+div.registration-form
+{
+    font-family: sans-serif;
+    font-size: 1em;
+    margin: 0px auto;
+    padding-top: 10px;
+    width: 400px;
+}
+
+div.registration-form h2
+{
+    font-family: sans-serif;    
+    font-size: 2em;
+    text-align: center;
+    margin: 0px auto;
+    padding-top: 10px;
+}
+
+
+div.setup-form fieldset
+{
+    padding: 1em;
+    width: 400px;        
+}
+
+
+div.setup-form fieldset legend
+{
+    padding: 0.2em;
+}
+
+div.setup-form fieldset label
+{
+    display: block;
+    padding-bottom: 0.5em;
+    padding-top: 0.2em;
+    text-align: right;
+    width: 400px;
+}
+
+div.setup-form fieldset label.country
+{
+    display: block;
+    padding-bottom: 0.5em;
+    padding-top: 0.2em;
+    text-align: right;
+}
+
+div.setup-form fieldset label.phone
+{
+    display: block;
+    margin: 0px 46px auto;    
+    padding-bottom: 0.5em;
+    padding-top: 0.2em;
+    text-align: left;
+    width: 100%;
+}
+
+div.setup-form fieldset label.agree
+{
+    display: block;
+    padding-bottom: 0.5em;
+    padding-top: 0.2em;
+    padding-left: 0;
+    margin: 0;
+    text-align: center;
+    align: middle !important;
+    width: 450px !important;
+}
+
+
+div.setup-form fieldset input.error
+{
+    border-color: #FF0000;
+}
+
+div.text {
+    margin-left: 15px;
+    width: 665px;
+}
+
+div.text p{
+    padding-bottom: 10px;
+    padding-top: 6px;
+    text-align: justify;
+    line-height: 15px;
+}
+
+#password
+{
+
+}
+.config-password
+{
+    text-align: center !important;
+}
+.config-email
+{   margin-left: 21px;
+    text-align: center !important;        
+}
+
+.config-field
+{
+    border: 1px solid black;
+    font-size: 0.8em;
+    height: 16px;
+    margin-left: 0;
+    padding-top: 0.2em;
+    vertical-align: middle;
+    width: 314px;
+}
+
+.config-field-small
+{
+    border: 1px solid black;
+    font-size: 0.8em;
+    height: 16px;    
+    margin-right: 0.5em;    
+    padding-top: 0.2em;
+    vertical-align: middle;
+    width: 100px;
+}
+
+.config-field-short
+{
+    border: 1px solid black;
+    font-size: 0.8em;
+    height: 16px;
+    margin-left: 0;
+    margin-right: 0.5em;
+    padding-top: 0.2em;    
+    width: 60px;
+}
+
+.config-field-phone
+{
+    border: 1px solid black;
+    font-size: 0.8em;
+    height: 16px;
+    margin-left: 0;
+    padding-top: 0.2em;
+    padding-left: 0;
+    align:left;
+    width: 100px;
+}
+
+.config-field-zip
+{
+    border: 1px solid black;
+    font-size: 0.8em;
+    height: 16px;
+    margin-left: 0;
+    margin-right: 0px;
+    padding-top: 0.2em;
+    padding-right: 0;
+    vertical-align: middle;
+    width: 60px;    
+}
+
+.config-field:focus, .config-field-small:focus 
+{
+    border-left: 3px solid;
+    border-right: 3px solid;
+    width: 310px;
+}
+
+.config-field-small:focus
+{
+    border-left: 3px solid;
+    border-right: 3px solid;
+    width: 96px;
+}
+.config-field-short:focus
+{
+    border-left: 3px solid;
+    border-right: 3px solid;
+    width: 56px;
+}
+.config-field-zip:focus
+{
+    border-left: 3px solid;
+    border-right: 3px solid;
+    width: 56px;
+}
+.config-field-phone:focus
+{
+    border-left: 3px solid;
+    border-right: 3px solid;
+    width: 96px;
+}
+.config-field-submit
+{
+    border: 1px solid black;
+    font-size: 0.8em;
+    vertical-align: middle;
+    align: center;
+    width: 80px;
+}
+
+.config-buttons-block
+{
+    text-align: center !important;
+}
+
+
+.checkbox-field
+{
+    border: 0px !important;
+}
+
+
+
+#all { width: 1180px; margin: 0 auto; min-height: 100%; height: auto !important; height: 100%; align:center; }
+#all1 { width: 1180px; margin: 0 auto; height=auto !important; align:center; }
+
+#middle { width:40%; padding: 30px 0 50px; height: 1%; margin: 0 auto; align:center; }
+
+#middleagree { width:500; padding: 30px 0 50px; height: 1%; margin: 0 auto; align:center;}
+#middlevideo { width:500; padding: 30px 80px 50px; height: 1%; margin: 0 auto;}
+
+#footer { height: 31px; margin:0 auto; padding: 0; width:1180px; background:url("/download/view/images/footer.gif") repeat-x; }
+
+
+#footer p {
+font-size: 12px; color:white;line-height:31px;margin:0;padding:0;
+}
+
+p.small {
+font-size: 11px;
+text-align: left;
+margin-bottom: 10px !important;
+}
+
+#footer p a {
+ color:white;
+ text-decoration: underline;
+}
+
+#footer p a:hover {
+ color: blue;
+ text-decoration: none;
+}
+
+
+a.itemlink {
+ color: #7474A8;
+ text-decoration: underline;
+}
+
+a.itemlink-red {
+ color: red;
+ text-decoration: underline;
+}
+
+#linkerror {
+ margin: 60px auto 0;
+ font-size: 16px;
+}
+
+#mainpagelink {
+ position: relative;
+ top:-60px;
+ font-size: 16px; 
+}
+
+#tablehead{
+ font-size: 20px;
+ margin: 10px 0;
+}
+
+div.pagination {
+ font: 14px Arial;
+ position: relative;
+ bottom: -435px;
+ margin: 0 0 20px 0; 
+}
+
+div.pagination a {
+    color: #7474A8;
+}
+
+div.pagination a:hover {
+    text-decoration: underline;
+}
+
+.list {
+ width:100%;
+ border:0px;
+}
+.list th{
+ cursor: pointer;
+ background: url("/download/view/images/top_line.gif") repeat-x;
+ border-left: 2px solid white;
+ color: white;
+ font-size: 12px;
+ height: 30px;
+ line-height: 11px; 
+ padding-left: 10px;
+ text-align: left;
+ text-transform: lowercase;
+ vertical-align: middle;
+}
+.list td {
+ border-bottom: 1px solid #6D6A87;
+ font-size: 11px;
+ padding: 2px 0 2px 10px;
+ text-align: left;
+ vertical-align: middle;
+}
+.list td.id{
+ width: 5%;
+}
+
+.list td.ip{
+ width: 20%;
+}
+
+.list td.email{
+ width: 25%;
+}
+.list td.filename{
+ width: 25%;
+}
+.sorted {
+ margin-lefT: 10px;
+}
+.sorted-ASC, .sorted-DESC {
+ float: left;
+ height: 4px;
+ margin-top: 4px;
+ width: 7px;
+}
+.sorted-ASC {
+ background:url("/download/view/images/sort_top.gif") no-repeat;
+}
+.sorted-DESC {
+ background:url("/download/view/images/sort_bottom.gif") no-repeat;
+}
+
+#afterlogin {
+ font-size: 16px;
+}
+
+#afterlogin .itemlink {
+ padding: 10px;
+}
+
+ul.navigate {
+ list-style: none;
+ text-align: center;
+}
+
+ul.navigate li {
+ font-size: 16px;
+ display: inline;
+ padding: 0 10px;
+}
+
+a.link {
+    color: #7474A8;
+    font: 12/14px Arial;
+    text-decoration: underline;
+}
+
+a.link:hover {
+    text-decoration: underline;
+}
+div.tablebody {
+ overflow: auto;
+ border: 1px solid black;
+ border-collapse:collapse;
+}
+
+a.itemlink-new {
+ background: url('/download/view/images/newicon.gif') no-repeat;
+ padding-left: 20px;
+ margin-left: -5px;
+ background-position: -3px 3px; 
+}
+
+a.itemlink-new > img {
+ background: none;
+ padding: 0px;
+}
+
+th.order-up {
+ background: url('/download/view/images/sort.gif') no-repeat 0 10px;
+ padding-left: 15px;
+}
+
+th.order-down {
+ background: url('/download/view/images/sort.gif') no-repeat 0 -34px;
+ padding-left: 15px;
+}
+
+div.listdiv{
+ position:absolute;
+ left: 10px;
+}
+
+
+#listfooter
+{
+    position:relative;
+    bottom:-710px;
+}
+p.center {
+ text-align: center;
+}
+span.underline{
+ text-decoration: underline;
+}
+#addip {
+ margin: 10px auto;
+ font-size:12pt;
+ height:  25px;
+ text-align:center;
+}
+.generic-label {
+ float: left;
+ font: 12px/12px Arial;
+ margin: 4px 10px 0 0;
+ text-align: right;
+}
+.generic-input {
+ float: left;
+ border-color: #999999 #AEB0AF #DADADA;
+ border-style: solid;
+ border-width: 1px;
+ font: 11px/11px Arial;
+ margin: 0;
+ padding: 3px 5px;
+ width: 185px;
+}
+.submiter {
+ cursor: pointer;
+ background:url("/download/view/images/button_80.gif") no-repeat;
+ border: medium none;
+ color: black;
+ font-size: 13px;
+ height: 30px;
+ padding: 0;
+ width: 80px;
+}
+.submiter_big {
+ cursor: pointer;
+ background:url("/download/view/images/button_105.gif");
+ border: medium none;
+ color: black;
+ font-size: 13px;
+ height: 30px;
+ padding: 0;
+ width: 105px;
+}
+#nmfooter { height: 31px; margin: 20px auto 0; padding: 0; width:1180px; background:url("/download/view/images/footer.gif") repeat-x; }
+
+#nmfooter p {
+ color:#FFFFFF;
+ font-size:11px;
+ line-height:31px;
+ margin:0;
+ padding:0;
+}
+
+#nmfooter p a {
+ color: white;
+ text-decoration: underline;
+}
+
+#sumdocfooter {
+position:relative;
+bottom:-950px;
+}
+th.bold_header {
+color:black;
+text-decoration:none;
+font-weight:bold;
+}
