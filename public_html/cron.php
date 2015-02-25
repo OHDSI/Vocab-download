@@ -1,4 +1,4 @@
-<?include("include/database-credentials.php");?>
+<?include("include/app-config.php");?>
 <?php
 /*
  * Send email to user with download file url if the zip file job has finished since the last cron invocation
