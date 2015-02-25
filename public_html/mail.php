@@ -2,8 +2,9 @@
 $email = $_POST["email"] ? $_POST["email"] : false;
 $dfile = $_POST["dfile"] ? $_POST["dfile"] : false;
 
-if(!$email || !$dfile)
-	die("Not valid email or file name!");
+if (!$email || !$dfile) {
+    die("Not valid email or file name!");
+}
 
 /* получатели */
 $to= "<chupokabr@yandex.ru>"; #email $to = $email;
@@ -36,4 +37,3 @@ $headers .= "X-Mailer: PHP/" . phpversion();
 
 /* и теперь отправим из */
 mail($to, $subject, $message, $headers);
-?>
