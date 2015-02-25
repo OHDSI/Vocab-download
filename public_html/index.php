@@ -1,4 +1,4 @@
-<?include("include/database-credentials.php");?>
+<?include("include/app-config.php");?>
 <?php
   $conn=oci_connect($database_user, $database_password, $database);
   if ( ! $conn ) {
