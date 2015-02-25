@@ -73,12 +73,24 @@ class mysql_db {
 
     function __construct($pcon=false, $server="", $username="", $password="", $database="", $charset="") {
 
-        if ($pcon)                 $this->db_pcon    = true;
-        if (strlen($server)   > 0) $this->db_host    = $server;
-        if (strlen($username) > 0) $this->db_user    = $username;
-        if (strlen($password) > 0) $this->db_pass    = $password;
-        if (strlen($database) > 0) $this->db_dbname  = $database;
-        if (strlen($charset)  > 0) $this->db_charset = $charset;
+        if ($pcon) {
+            $this->db_pcon = true;
+        }
+        if (strlen($server) > 0) {
+            $this->db_host = $server;
+        }
+        if (strlen($username) > 0) {
+            $this->db_user = $username;
+        }
+        if (strlen($password) > 0) {
+            $this->db_pass = $password;
+        }
+        if (strlen($database) > 0) {
+            $this->db_dbname = $database;
+        }
+        if (strlen($charset) > 0) {
+            $this->db_charset = $charset;
+        }
 
         //
         if (strlen($this->db_host) > 0 && strlen($this->db_user) > 0)
@@ -98,9 +110,9 @@ class mysql_db {
 
         // Open persistent or normal connection
         if ($this->db_pcon) {
-            $this->mysql_link = @mysql_pconnect($this->db_host, $this->db_user, $this->db_pass);
+            $this->mysql_link = mysql_pconnect($this->db_host, $this->db_user, $this->db_pass);
         } else {
-            $this->mysql_link = @mysql_connect ($this->db_host, $this->db_user, $this->db_pass);
+            $this->mysql_link = @mysql_connect($this->db_host, $this->db_user, $this->db_pass);
         }
 
         // Connect to mysql server failed?
@@ -141,9 +153,11 @@ class mysql_db {
     public function query($sql, $debug = false) {
         $this->ResetError();
         $this->sql    = $sql;
-        $this->result = @mysql_query($this->sql, $this->mysql_link);
+        $this->result = mysql_query($this->sql, $this->mysql_link);
         // show debug info
-        if($debug) self::ShowDebugInfo("sql=".$this->sql);
+        if ($debug) {
+            self::ShowDebugInfo("sql=" . $this->sql);
+        }
         // start the analysis
         if (TRUE === $this->result) {   // simply result
             $return = TRUE;         // successfully (for example: INSERT INTO ...)
@@ -188,7 +202,9 @@ class mysql_db {
      */
     public function SelectDatabase($database, $charset = "") {
         $return_value = true;
-        if (! $charset) $charset = $this->db_charset;
+        if (!$charset) {
+            $charset = $this->db_charset;
+        }
         $this->ResetError();
         if (! (mysql_select_db($database))) {
             $this->SetError();
@@ -207,20 +223,26 @@ class mysql_db {
 
 function database_fetch_array($database_result)
   {
-    if( !is_resource($database_result) ) return FALSE;
-	  return mysql_fetch_array($database_result, MYSQL_NUM);
+    if (!is_resource($database_result)) {
+            return FALSE;
+        }
+        return mysql_fetch_array($database_result, MYSQL_NUM);
 	}
 	
 function database_fetch_assoc($database_result)
   {
-    if( !is_resource($database_result) ) return FALSE;
-	  return mysql_fetch_assoc($database_result);
+    if (!is_resource($database_result)) {
+            return FALSE;
+        }
+        return mysql_fetch_assoc($database_result);
 	}
 	
 function database_num_rows($database_result)
   {
-    if( !is_resource($database_result) ) return FALSE;
-	  return mysql_num_rows($database_result);
+    if (!is_resource($database_result)) {
+            return FALSE;
+        }
+        return mysql_num_rows($database_result);
 	}
 
 
@@ -268,9 +290,9 @@ function database_insert_id()
                 $this->error_number = $errorNumber;
             } else {
                 if ($this->IsConnected()) {
-                    $this->error_number = @mysql_errno($this->mysql_link);
+                    $this->error_number = mysql_errno($this->mysql_link);
                 } else {
-                    $this->error_number = @mysql_errno();
+                    $this->error_number = mysql_errno();
                 }
             }
         } catch(Exception $e) {
@@ -298,7 +320,7 @@ function database_insert_id()
         $this->ResetError();
         $success = $this->Release();
         if ($success) {
-            $success = @mysql_close($this->mysql_link);
+            $success = mysql_close($this->mysql_link);
             if (! $success) {
                 $this->SetError();
             } else {
@@ -320,11 +342,12 @@ function database_insert_id()
         if (! $this->result) {
             $success = true;
         } else {
-            $success = @mysql_free_result($this->result);
-            if (! $success) $this->SetError();
+            $success = mysql_free_result($this->result);
+            if (! $success) {
+                $this->SetError();
+            }
         }
         return $success;
     }
 	
 }// end
-?>
