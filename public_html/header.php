@@ -29,7 +29,7 @@ conf = {"site_url":""};    //-->
 		
 		<div id="header">
         <div id="logo-floater">
-        <h1>Standard Vocabulary for OMOP Common Data Model</h1>        </div>                      
+        <h1>Standardized Vocabulary for OMOP Common Data Model Versions 4 and 5</h1>        </div>                      
       </div>
 
             <div id="container">
