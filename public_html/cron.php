@@ -51,21 +51,33 @@ foreach($arUserProcess as $item){
             /* message */
             if (substr($FName,0,17) == 'vocab_download_v4') {
                 /* link to V4.5 control files folder */
-                $ctl_files_folder = '<a href="https://github.com/OHDSI/CommonDataModel">V4.5 control files</a>';
+                $ctl_files_folder = 'https://github.com/OHDSI/CommonDataModel/tree/master/Version4';
             } else {
                 /* link to V5 control files folder */
-                $ctl_files_folder = '<a href="https://github.com/OHDSI/CommonDataModel">V5 control files</a>';
+                $ctl_files_folder = 'https://github.com/OHDSI/CommonDataModel';
             };
             $message = '
-            <html>
-                <head>
-                    <title>Vocabularies. Your download link</title>
-                </head>
-                <body>
-                    <p>You can download the vocabularies file using this <a href="'.$vocabulary_server_URL.$FName.'">link</a>!</p>
-                    <p>The database control files to load the vocabularies are here: ' . $ctl_files_folder  . '</p>
-                </body>
-            </html>
+				<html>
+				<head>
+				 <title>Standardized Vocabularies download link</title>
+				</head>
+				<body>
+				<h1>Link for downloading the Standardized Vocabularies</h1>
+				<p>Please download and load the Standardized Vocabularies as following:</p>
+				<ol>
+				<li>Click on this <a href="'.$vocabulary_server_URL.$FName.'">link</a> to download the zip file. 
+				Typical file sizes, depending on the number of vocabularies selected, are between 30 and 250 MB.</li>
+				<li>Unpack.</li>
+				<li>If needed, create the tables.</li>
+				<li>Load the unpacked files into the tables.</li>
+				</ol>
+				<p>The control files can be found <a href="'.$ctl_files_folder.'">here</a>.  
+				They are provided in the folders Oracle/, PostgreSQL/ and SQL Server/ for the respective SQL dialect. The loading scripts are inside the subfolder VocabImport/.</p>
+				<br>
+				<p>If you hit problems please use the <a href="http://forums.ohdsi.org/c/implementers">OHDSI Forum pages</a>, and somebody will help you. You will need to register.</p>
+				<p>Christian Reich and the Vocabulary Team</p>
+				</body>
+				</html>
             ';
 
             /* To send an HTML email mail, set Content-type header to text/html. */

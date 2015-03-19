@@ -5,16 +5,16 @@
     echo "Unable to connect: " . var_dump( oci_error() );
     die();
   }
-  else {
+  else {   
         $stid1 = oci_parse($conn, 'ALTER SESSION SET CURRENT_SCHEMA = PRODV5');
-        oci_execute($stid1);
-
+	oci_execute($stid1);
+	
         $stid = oci_parse($conn, 'select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available, c.url, c.click_disabled from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id');
-        oci_execute($stid);
-        $arVocab = [];
-        while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
+	oci_execute($stid);
+	$arVocab = [];
+	while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
             $arVocab[] = $row;
-        }
+	}
   }
   // free all statement identifiers and close the database connection
 oci_free_statement($stid1);
@@ -28,7 +28,7 @@ oci_close($conn);
         <em class = "corner corner-top corner-right"></em>
         <em class = "corner corner-bottom corner-left"></em>
         <em class = "corner corner-bottom corner-right"></em>
-        <h2>Restricted Vocabulary Registration and Release</h2>
+        <h2>Fill out the form, pick the required vocabularies and select the right version</h2>
         <form id="register_form" enctype="application/x-www-form-urlencoded" method="post" class="generic-form" action="/downloads.php">
 <div class="input-block">
 <input type="hidden" name="docname" value="Vocabulary Data CSV V4" id="docname">
@@ -106,7 +106,7 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
 </td>
 <td style="text-align: center;">
     <?php if($item["AVAILABLE"] <> "Currently not available"):?><a href="<?=$item["URL"]?>"><?=$item["AVAILABLE"]?></a><?endif;?>
-    <?php if($item["AVAILABLE"] == "Currently not available"):?><?=$item["AVAILABLE"]?><?endif;?></td>  
+    <?php if($item["AVAILABLE"] == "Currently not available"):?><?=$item["AVAILABLE"]?><?endif;?></td>
 </tr>
 
 <?php endforeach;?>
@@ -120,12 +120,12 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
 <script>
     jQuery(function($) {
         $('#register_form').submit(function(e){
-
+            
             var form = $('#register_form');
-
+            
             // assume form is valid unless one of the below validation checks fails
             var form_valid = true;
-
+            
             // email is required
             var email = form.find('#email').val();
             if ($.trim(email)) {
@@ -142,7 +142,7 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 $('#email + .validation-error').text('Please enter a valid email address');
                 form_valid = false;
             }
-
+            
             // name
             var user_name = form.find('#user_name').val();
             if ($.trim(user_name)) {
@@ -159,7 +159,7 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 $('#user_name + .validation-error').text('Please enter a valid name');
                 form_valid = false;
             }
-
+            
             // organization
             var organization = form.find('#organization').val();
             if ($.trim(organization)) {
@@ -176,7 +176,7 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 $('#organization + .validation-error').text('Please enter a valid organization');
                 form_valid = false;
             }
-
+            
             // address
             var address = form.find('#address').val();
             if ($.trim(address)) {
@@ -192,8 +192,8 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 }
                 $('#address + .validation-error').text('Please enter a valid address');
                 form_valid = false;
-            }
-
+            } 
+            
             // city
             var city = form.find('#city').val();
             if ($.trim(city)) {
@@ -209,8 +209,8 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 }
                 $('#city + .validation-error').text('Please enter a valid city');
                 form_valid = false;
-            }
-
+            } 
+            
             // country
             var country = form.find('#country').val();
             if ($.trim(country)) {
@@ -227,7 +227,7 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 $('#country + .validation-error').text('Please enter a valid country');
                 form_valid = false;
             }
-
+            
             // phone
             var phone = form.find('#phone').val();
             if ($.trim(phone)) {
@@ -243,15 +243,15 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 }
                 $('#phone + .validation-error').text('Please enter a valid phone number');
                 form_valid = false;
-            }
-
+            } 
+            
             // allow post only if form is valid
             if (form_valid) {
                 return(true);
             } else {
                 return(false);
             }
-
+            
         });
     });
 </script>
