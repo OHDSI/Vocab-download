@@ -41,7 +41,7 @@ class mysql_db {
         // SET THESE VALUES TO MATCH YOUR DATA CONNECTION
     private $db_host    = "localhost";  // server name
     private $db_user    = "admin_default";       // user name
-    private $db_pass    = "26qHowfcRK";           // password
+    private $db_pass    = "XXXXXXXXXXX";           // password redacted
     private $db_dbname  = "admin_default";           // database name
     private $db_charset = "utf-8";           // optional character set (i.e. utf8)
     private $db_pcon    = false;        // use persistent connection?

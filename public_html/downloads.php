@@ -91,7 +91,7 @@ $insert_user_process_sql =
         TITLE,
         STATE,
         ZIP_CODE,
-        FILE_NAME,
+	FILE_NAME,
         FILE_CREATION_JOB_RUNNING_FLAG
     ) VALUES (
         '" . $email . "',
