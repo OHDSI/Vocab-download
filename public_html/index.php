@@ -5,29 +5,16 @@
     echo "Unable to connect: " . var_dump( oci_error() );
     die();
   }
-  else {   
-	//$stid = oci_parse($conn, 'ALTER SESSION SET CURRENT_SCHEMA = V5DEV');
+  else {
         $stid1 = oci_parse($conn, 'ALTER SESSION SET CURRENT_SCHEMA = PRODV5');
-	oci_execute($stid1);
-	
-	$stid = oci_parse($conn, 'select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id');
-	oci_execute($stid);
-	$arVocab = [];
-	while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
-		if($row["OMOP_REQ"] == "Y") {
-			continue;
-                } else {
-                    $arVocab[] = $row;
-                }
-	}
-	$arVocab[] = Array (
-		"CLICK_DEFAULT" => "Y",
-                "VOCABULARY_ID_V4" => "",
-                "VOCABULARY_ID_V5" => "",
-                "VOCABULARY_NAME" => "OMOP type and metadata concepts",
-                "OMOP_REQ" => "",
-                "AVAILABLE" => "" 
-        );
+        oci_execute($stid1);
+
+        $stid = oci_parse($conn, 'select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available, c.url, c.click_disabled from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id');
+        oci_execute($stid);
+        $arVocab = [];
+        while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
+            $arVocab[] = $row;
+        }
   }
   // free all statement identifiers and close the database connection
 oci_free_statement($stid1);
@@ -94,36 +81,32 @@ oci_close($conn);
 V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
   V5<input name="CDMVersion" id="CDMVersion2" value="5" type="radio" checked="checked">
 </div>
-<!--
-<div class="input-block"><label class = "for_large" style = "" for="purpose">Purpose of using the vocabulary<span class="required">*</span>:</label>
-
-<textarea name="purpose" id="purpose" maxlength="1024" rows="6" cols="32"></textarea>
-</div>
--->
 
 <div class="input-block"><label class = "for_large" style = "" for="purpose">Select vocabularies<span class="required">*</span>:</label>
 
-<table style="margin-left: 140px; width: 88%;" class="vocabs">
+<table style="border-collapse:collapse; margin-left: 140px; width: 88%;" class="vocabs">
 <tr style="font-weight: bold;">
 <td></td>
-<td width="50%">VOCABULARY NAME</td>
 <td style="text-align: center;">Vocabulary ID<br/>(CDM V4.5)</td>
 <td style="text-align: center;">Vocabulary code<br/>(CDM V5)</td>
-<td style="text-align: center;">License<br/>required</td>
+<!--<td style="text-align: center;">OMOP<br/>required</td>-->
+<td width="50%">VOCABULARY NAME</td>
 <td style="text-align: center;">Available</td>
 </tr>
 <?php foreach($arVocab as $index => $item):?>
-<tr>
+<tr <?php if($item["OMOP_REQ"] == "Y"):?>style="display:none"<?endif;?>>
 <td>
-<input type="checkbox" name="purpose[]" value="<?=$item["VOCABULARY_ID_V4"] ? $item["VOCABULARY_ID_V4"] : "OMOPTypes"?>" id="voc<?=$item["VOCABULARY_ID_V4"] ? $item["VOCABULARY_ID_V4"] : "OMOPTypes"?>" <?php if($item["CLICK_DEFAULT"] == "Y"):?>checked="checked"  disabled="disabled"<?endif;?>/>
-</td>
-<td style="text-align: left;">
-<label for="voc<?=$item["VOCABULARY_ID_V4"]?  $item["VOCABULARY_ID_V4"] : "OMOPTypes"?>" style="text-align: left;"><?=$item["VOCABULARY_NAME"]?></label>
+<input type="checkbox" name="purpose[]" value="<?=$item["VOCABULARY_ID_V4"]?>" id="voc<?=$item["VOCABULARY_ID_V4"]?>" <?php if($item["CLICK_DEFAULT"] == "Y"):?>checked="checked"<?endif;?> <?php if($item["CLICK_DISABLED"] == "Y"):?>disabled="disabled"<?endif;?> />
 </td>
 <td style="text-align: center;"><?=$item["VOCABULARY_ID_V4"]?></td>
 <td style="text-align: center;"><?=$item["VOCABULARY_ID_V5"]?></td>
-<td style="text-align: center;"><?if ($item["OMOP_REQ"]):?>Yes<?else:?> - <?endif;?></td>
-<td style="text-align: center;"><?=$item["AVAILABLE"]?></td>
+<!--<td style="text-align: center;"><?if ($item["OMOP_REQ"]):?>Yes<?else:?> - <?endif;?></td>-->
+<td style="text-align: left;">
+<label for="voc<?=$item["VOCABULARY_ID_V4"]?>" style="text-align: left;"><?=$item["VOCABULARY_NAME"]?></label>
+</td>
+<td style="text-align: center;">
+    <?php if($item["AVAILABLE"] <> "Currently not available"):?><a href="<?=$item["URL"]?>"><?=$item["AVAILABLE"]?></a><?endif;?>
+    <?php if($item["AVAILABLE"] == "Currently not available"):?><?=$item["AVAILABLE"]?><?endif;?></td>  
 </tr>
 
 <?php endforeach;?>
@@ -137,12 +120,12 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
 <script>
     jQuery(function($) {
         $('#register_form').submit(function(e){
-            
+
             var form = $('#register_form');
-            
+
             // assume form is valid unless one of the below validation checks fails
             var form_valid = true;
-            
+
             // email is required
             var email = form.find('#email').val();
             if ($.trim(email)) {
@@ -159,7 +142,7 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 $('#email + .validation-error').text('Please enter a valid email address');
                 form_valid = false;
             }
-            
+
             // name
             var user_name = form.find('#user_name').val();
             if ($.trim(user_name)) {
@@ -176,7 +159,7 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 $('#user_name + .validation-error').text('Please enter a valid name');
                 form_valid = false;
             }
-            
+
             // organization
             var organization = form.find('#organization').val();
             if ($.trim(organization)) {
@@ -193,7 +176,7 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 $('#organization + .validation-error').text('Please enter a valid organization');
                 form_valid = false;
             }
-            
+
             // address
             var address = form.find('#address').val();
             if ($.trim(address)) {
@@ -209,8 +192,8 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 }
                 $('#address + .validation-error').text('Please enter a valid address');
                 form_valid = false;
-            } 
-            
+            }
+
             // city
             var city = form.find('#city').val();
             if ($.trim(city)) {
@@ -226,8 +209,8 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 }
                 $('#city + .validation-error').text('Please enter a valid city');
                 form_valid = false;
-            } 
-            
+            }
+
             // country
             var country = form.find('#country').val();
             if ($.trim(country)) {
@@ -244,7 +227,7 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 $('#country + .validation-error').text('Please enter a valid country');
                 form_valid = false;
             }
-            
+
             // phone
             var phone = form.find('#phone').val();
             if ($.trim(phone)) {
@@ -260,15 +243,15 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
                 }
                 $('#phone + .validation-error').text('Please enter a valid phone number');
                 form_valid = false;
-            } 
-            
+            }
+
             // allow post only if form is valid
             if (form_valid) {
                 return(true);
             } else {
                 return(false);
             }
-            
+
         });
     });
 </script>
