@@ -127,6 +127,6 @@ oci_free_statement($stid0);
 oci_free_statement($stid_add_user_process);
 oci_close($conn);
 
-header("Location: /download-process.php");
+header("Location: download-process.php");
 exit;
 
