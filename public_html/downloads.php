@@ -30,7 +30,7 @@ else {
       oci_execute($stid);
       $arVocab = array();
       $OMOPTypes = array();
-      $index = 0;
+      $index = 1000;
       while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
           $OMOPTypes[$index] = $row["VOCABULARY_ID_V4"];
           $index = $index + 1;
@@ -56,8 +56,8 @@ if(!$email || !$name || !$Organization || !$Address || !$City  || !$Country || !
 }
 
 
-// merge in the OMOP required vocab ids
-$allvocabids = array_merge($vocabids, $OMOPTypes);
+// combine the OMOP required vocab ids with the user selected vocab ids
+$allvocabids = $vocabids + $OMOPTypes;
 $allvocabids = array_unique($allvocabids);
 
 if($CDMVersion == 4.5){
