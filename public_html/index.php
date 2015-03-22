@@ -29,7 +29,7 @@ oci_close($conn);
         <em class = "corner corner-bottom corner-left"></em>
         <em class = "corner corner-bottom corner-right"></em>
         <h2>Fill out the form, pick the required vocabularies and select the right version</h2>
-        <form id="register_form" enctype="application/x-www-form-urlencoded" method="post" class="generic-form" action="/downloads.php">
+        <form id="register_form" enctype="application/x-www-form-urlencoded" method="post" class="generic-form" action="downloads.php">
 <div class="input-block">
 <input type="hidden" name="docname" value="Vocabulary Data CSV V4" id="docname">
 </div>
