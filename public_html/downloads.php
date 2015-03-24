@@ -37,19 +37,20 @@ else {
       }
 }
 
-$email = $_POST["email"] ? $_POST["email"] : false;
-$vocabids = $_POST["purpose"] ? $_POST["purpose"] : array();
-$name = $_POST["user_name"] ? $_POST["user_name"] : false;
-$Organization = $_POST["organization"] ? $_POST["organization"] : false;
-$Address = $_POST["address"] ? $_POST["address"] : false;
-$City = $_POST["city"] ? $_POST["city"] : false;
-$Country = $_POST["country"] ? $_POST["country"] : false;
-$Phone = $_POST["phone"] ? $_POST["phone"] : false;
+// escape any embedded single quote by making it into two single quotes so that the Oracle insert statement later in the code will succeed
+$email = $_POST["email"] ? str_replace("'","''", $_POST["email"]) : false;
+$vocabids = $_POST["purpose"] ? str_replace("'","''", $_POST["purpose"]) : array();
+$name = $_POST["user_name"] ? str_replace("'","''", $_POST["user_name"]) : false;
+$Organization = $_POST["organization"] ? str_replace("'","''", $_POST["organization"]) : false;
+$Address = $_POST["address"] ? str_replace("'","''", $_POST["address"]) : false;
+$City = $_POST["city"] ? str_replace("'","''", $_POST["city"]) : false;
+$Country = $_POST["country"] ? str_replace("'","''", $_POST["country"]) : false;
+$Phone = $_POST["phone"] ? str_replace("'","''", $_POST["phone"]) : false;
 
-$Title = $_POST["title"] ? $_POST["title"] : false;
-$State = $_POST["state"] ? $_POST["state"] : false;
-$Zip = $_POST["zip"] ? $_POST["zip"] : false;
-$CDMVersion = $_POST["CDMVersion"] ? $_POST["CDMVersion"] : 4.5;
+$Title = $_POST["title"] ? str_replace("'","''", $_POST["title"]) : false;
+$State = $_POST["state"] ? str_replace("'","''", $_POST["state"]) : false;
+$Zip = $_POST["zip"] ? str_replace("'","''", $_POST["zip"]) : false;
+$CDMVersion = $_POST["CDMVersion"] ? str_replace("'","''", $_POST["CDMVersion"]) : 4.5;
 
 if(!$email || !$name || !$Organization || !$Address || !$City  || !$Country || !$Phone) {
         die("Not valid information!");
@@ -109,7 +110,9 @@ $insert_user_process_sql =
         '" . $FName. "',
         'Y'
     )";
+
 $stid_add_user_process = oci_parse($conn, $insert_user_process_sql);
+
 
 $returnvalue = oci_execute($stid_add_user_process);
 if (!$returnvalue) {
