@@ -1,16 +1,43 @@
 <?include("include/app-config.php");?>
+<?include("include/utility-functions.php");?>
 <?php
   $conn=oci_connect($database_user, $database_password, $database);
   if ( ! $conn ) {
-    echo "Unable to connect: " . var_dump( oci_error() );
-    die();
+    sendErrorEmail("index.php: Unable to connect to database, user=" . $database_user . ", database_password=" . $database_password . ", database=" . $database);
+    header("Location:error.php?errorMessage=".urlencode("Error: Unable to connect to database"));
+    die;
   }
   else {   
         $stid1 = oci_parse($conn, 'ALTER SESSION SET CURRENT_SCHEMA = PRODV5');
-	oci_execute($stid1);
+        if ( ! $stid1 ) {
+            $e = oci_error($conn);
+            sendErrorEmail("index.php: oci_parse ALTER SESSION SET CURRENT_SCHEMA = PRODV5 failed, error message=" . $e['message']);
+            header("Location:error.php?errorMessage=".urlencode("Error: unable to parse set database schema"));
+            die;
+        }
+	$returnvalue = oci_execute($stid1);
+        if (!$returnvalue) {
+            $e = oci_error($stid);
+            sendErrorEmail("index.php: oci_execute ALTER SESSION SET CURRENT_SCHEMA = PRODV5 failed, error message=" . $e['message']);
+            header("Location:error.php?errorMessage=".urlencode("Error: unable to execute set database schema"));
+            die;
+        }
 	
         $stid = oci_parse($conn, 'select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available, c.url, c.click_disabled from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id');
-	oci_execute($stid);
+        if ( ! $stid ) {
+            $e = oci_error($conn);
+            sendErrorEmail("index.php: oci_parse select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available, c.url, c.click_disabled from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id failed, error message=" . $e['message']);
+            header("Location:error.php?errorMessage=".urlencode("Error: unable to parse call to access vocabulary and vocabulary_conversion tables"));
+            die;
+        }
+	$returnvalue = oci_execute($stid);
+        if (!$returnvalue) {
+            $e = oci_error($stid);
+            sendErrorEmail("index.php oci_execute select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available, c.url, c.click_disabled from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id failed, error message=" . $e['message']);
+            header("Location:error.php?errorMessage=".urlencode("Error: unable to execute call to access vocabulary and vocabulary_conversion tables"));
+            die;
+        }
+        
 	$arVocab = [];
 	while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
             $arVocab[] = $row;

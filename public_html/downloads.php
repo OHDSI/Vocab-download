@@ -1,4 +1,5 @@
 <?include("include/app-config.php");?>
+<?include("include/utility-functions.php");?>
 <?php
 
 function getGUID(){
@@ -19,15 +20,41 @@ function getGUID(){
 
 $conn=oci_connect($database_user, $database_password, $database);
 if ( ! $conn ) {
-  echo "Unable to connect: " . var_dump( oci_error() );
-  die();
+    sendErrorEmail("downloads.php: Unable to connect to database, user=" . $database_user . ", database_password=" . $database_password . ", database=" . $database);
+    header("Location:error.php?errorMessage=".urlencode("Error: Unable to connect to database"));
+    die;
 }
 else {
       $stid0 = oci_parse($conn, 'ALTER SESSION SET CURRENT_SCHEMA = PRODV5');
-      oci_execute($stid0);
-
+      if ( ! $stid0 ) {
+            $e = oci_error($conn);
+            sendErrorEmail("downloads.php: oci_parse ALTER SESSION SET CURRENT_SCHEMA = PRODV5 failed, error message=" . $e['message']);
+            header("Location:error.php?errorMessage=".urlencode("Error: unable to parse set database schema"));
+            die;
+        }
+      $returnvalue = oci_execute($stid0);
+      if (!$returnvalue) {
+            $e = oci_error($stid0);
+            sendErrorEmail("downloads.php: oci_execute ALTER SESSION SET CURRENT_SCHEMA = PRODV5 failed, error message=" . $e['message']);
+            header("Location:error.php?errorMessage=".urlencode("Error: unable to execute set database schema"));
+            die;
+      }
+        
       $stid = oci_parse($conn, "select c.vocabulary_id_v4 from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id where omop_req = 'Y'");
-      oci_execute($stid);
+      if ( ! $stid ) {
+            $e = oci_error($conn);
+            sendErrorEmail("downloads.php: oci_parse select c.vocabulary_id_v4 from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id where omop_req = 'Y' failed, error message=" . $e['message']);
+            header("Location:error.php?errorMessage=".urlencode("Error: unable to parse call to access vocabulary and vocabulary_conversion tables"));
+            die;
+      }
+      $returnvalue = oci_execute($stid);
+      if (!$returnvalue) {
+            $e = oci_error($stid);
+            sendErrorEmail("downloads.php oci_execute select c.vocabulary_id_v4 from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id where omop_req = 'Y' failed, error message=" . $e['message']);
+            header("Location:error.php?errorMessage=".urlencode("Error: unable to execute call to access vocabulary and vocabulary_conversion tables"));
+            die;
+      }
+      
       $arVocab = array();
       $OMOPTypes = array();
       $index = 1000;
@@ -76,7 +103,12 @@ if($CDMVersion == 4.5){
 
 $shell_exec_string = 'nohup '.$perl_dump_script_dir.'dump.pl '.$Cred.' '.$CDMVersion.' '.$zip_file_output_dir.$FName.' '.$VocIds.' > /dev/null & echo $!';
 $PID = shell_exec($shell_exec_string);
-
+if (!$PID) {
+    $e = oci_error($stid);
+    sendErrorEmail("downloads.php shell_exec failed, exec_string=" . $shell_exec_string );
+    header("Location:error.php?errorMessage=".urlencode("Error: unable to generate export file"));
+    die;
+}
 
 $insert_user_process_sql =
     "INSERT INTO VOCAB_DOWNLOAD.VOCABULARY_USER (
@@ -112,16 +144,19 @@ $insert_user_process_sql =
     )";
 
 $stid_add_user_process = oci_parse($conn, $insert_user_process_sql);
-
+if ( ! $stid_add_user_process ) {
+            $e = oci_error($conn);
+            sendErrorEmail("downloads.php: oci_parse INSERT INTO VOCAB_DOWNLOAD.VOCABULARY_USER table failed, sql=" . $insert_user_process_sql . ", error message=" . $e['message']);
+            header("Location:error.php?errorMessage=".urlencode("Error: unable to log export file request"));
+            die;
+        }
 
 $returnvalue = oci_execute($stid_add_user_process);
 if (!$returnvalue) {
     $e = oci_error($stid_add_user_process);  // For oci_execute errors pass the statement handle
-    print htmlentities($e['message']);
-    print "\n<pre>\n";
-    print htmlentities($e['sqltext']);
-    printf("\n%".($e['offset']+1)."s", "^");
-    print  "\n</pre>\n";
+    sendErrorEmail("downloads.php: oci_execute INSERT INTO VOCAB_DOWNLOAD.VOCABULARY_USER table failed, sql=" . $e['sqltext'] . ", error message=" . $e['message']);
+    header("Location:error.php?errorMessage=".urlencode("Error: unable to execute INSERT INTO VOCAB_DOWNLOAD.VOCABULARY_USER table"));
+    die;    
 }
 
 // free all statement identifiers and close the database connection
