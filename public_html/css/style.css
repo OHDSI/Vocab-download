@@ -71,6 +71,24 @@ button {
     color: #FFF;
 }
 
+.error-message {
+    color: #F00;
+    clear:both;
+    padding: 5px 0;
+    font-size: 14px;
+    text-align: center;
+    border-color: #999999 #AEB0AF #DADADA;
+    border-left: 1px solid #AEB0AF;
+    border-right: 1px solid #AEB0AF;
+    border: solid 1px;
+    font: 11px/11px Arial;
+    margin: 15px;
+    padding: 5px;
+    line-height: 33px;
+    vertical-align: middle;
+    
+}
+
 form.generic-form {
     margin: 10px 0 0 0 ;
     padding: 0;
