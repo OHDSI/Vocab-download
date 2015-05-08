@@ -79,9 +79,13 @@ foreach($arUserProcess as $item){
                                 <li>Click on this <a href="'.$vocabulary_server_URL.$FName.'">link</a> to download the zip file.
                                 Typical file sizes, depending on the number of vocabularies selected, are between 30 and 250 MB.</li>
                                 <li>Unpack.</li>
+                                <li>Reconstitute CPT-4. Run on the command line \"\"</li>
                                 <li>If needed, create the tables.</li>
                                 <li>Load the unpacked files into the tables.</li>
                                 </ol>
+								<p>Important: All vocabularies are fully represented in the downloaded files with the exception of CPT-4: 
+								We do not have a distribution license to ship CPT-4 codes together with the descriptions. Don\'t ask! 
+								Therefore, we provide you with a utility that downloads the descriptions separately and merges them together with everything else. After unpacking, run \"java -jar cpt4.jar\"</p>
                                 <p>The control files can be found <a href="'.$ctl_files_folder.'">here</a>.
                                 They are provided in the folders Oracle/, PostgreSQL/ and SQL Server/ for the respective SQL dialect. The loading scripts are inside the subfolder VocabImport/.</p>
                                 <br>
