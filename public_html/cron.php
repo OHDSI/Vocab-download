@@ -26,7 +26,7 @@ if ( ! $conn ) {
     sendErrorEmail("cron.php: Unable to connect to database, user=" . $database_user . ", database_password=" . $database_password . ", database=" . $database);
     die;
 }
-$stid_user_process = oci_parse($conn, "select email_address, process_id, file_name from vocab_download.vocabulary_user where file_creation_job_running_flag = 'Y'");
+$stid_user_process = oci_parse($conn, "select email_address, process_id, file_name, licensed from vocab_download.vocabulary_user where file_creation_job_running_flag = 'Y'");
 if ( ! $stid_user_process ) {
             $e = oci_error($conn);
             sendErrorEmail("cron.php: oci_parse select email_address, process_id, file_name from vocab_download.vocabulary_user where file_creation_job_running_flag = 'Y' failed, error message=" . $e['message']);
@@ -73,8 +73,37 @@ foreach($arUserProcess as $item){
                                  <title>Standardized Vocabularies download link</title>
                                 </head>
                                 <body>
-                                <h1>Link for downloading the Standardized Vocabularies</h1>
-                                <p>Please download and load the Standardized Vocabularies as following:</p>
+                                ';
+
+            if (!empty($item['LICENSED'])) {
+                $query_licensed_vocabularies =
+                    "SELECT v.VOCABULARY_NAME, c.VOCABULARY_ID_V5, c.VOCABULARY_ID_V4"
+                    . " FROM VOCABULARY_CONVERSION c"
+                    . " JOIN VOCABULARY v on c.VOCABULARY_ID_V5=v.VOCABULARY_ID"
+                    . " AND c.VOCABULARY_ID_V4 IN (" . $item['LICENSED'] .")";
+                $stid_licensed_vocabularies = oci_parse($conn, $query_licensed_vocabularies);
+                $result_licensed_vocabularies = oci_execute($stid_licensed_vocabularies);
+                $licensed_vocabularies = array();
+                while ($row = oci_fetch_array($stid_licensed_vocabularies, OCI_ASSOC+OCI_RETURN_NULLS)) {
+                    $licensed_vocabularies[] = $row['VOCABULARY_NAME']
+                        . ' (#' . $row['VOCABULARY_ID_V4'] . ' ' . $row['VOCABULARY_ID_V5'] . ')';
+                }
+                if (!empty($licensed_vocabularies)) {
+                    $message .= '
+                        <h3>Licensed vocabularies</h3>
+                        <p>The following vocabularies you requested require a commercial license.
+                        You must obtain those licenses from the license holders and then show them to us.
+                        Please <a href="mailto:contact@ohdsi.org?subject=License%20for%20commercial%20vocabulary&body=Place%20here%20proof%20of%20license%20for%20the%20requested%20vocabulary%28ies%29.">contact</a> us for questions or to provide proof of the licenses:</p>
+                            <ul>
+                                <li>'. implode("</li>\r\n<li>", $licensed_vocabularies) .'</li>
+                            </ul>
+                            <hr/>';
+                }
+            }
+
+            $message .= '
+                        <h3>Link for downloading the Standardized Vocabularies</h3>
+                        <p>Please download and load the Standardized Vocabularies as following:</p>
                                 <ol>
                                 <li>Click on this <a href="'.$vocabulary_server_URL.$FName.'">link</a> to download the zip file.
                                 Typical file sizes, depending on the number of vocabularies selected, are between 30 and 250 MB.</li>

@@ -40,7 +40,7 @@ else {
             die;
       }
         
-      $stid = oci_parse($conn, "select c.vocabulary_id_v4 from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id where omop_req = 'Y'");
+      $stid = oci_parse($conn, "select c.vocabulary_id_v4 from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id where omop_req = 'Y' or (click_default = 'Y' and click_disabled = 'Y')");
       if ( ! $stid ) {
             $e = oci_error($conn);
             sendErrorEmail("downloads.php: oci_parse select c.vocabulary_id_v4 from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id where omop_req = 'Y' failed, error message=" . $e['message']);
@@ -78,6 +78,41 @@ $Title = $_POST["title"] ? str_replace("'","''", $_POST["title"]) : false;
 $State = $_POST["state"] ? str_replace("'","''", $_POST["state"]) : false;
 $Zip = $_POST["zip"] ? str_replace("'","''", $_POST["zip"]) : false;
 $CDMVersion = $_POST["CDMVersion"] ? str_replace("'","''", $_POST["CDMVersion"]) : 4.5;
+
+$LicensedIds = '';
+
+if (!empty($vocabids)) {
+    $query_license_required =
+        "SELECT VOCABULARY_ID_V4, VOCABULARY_ID_V5"
+        . " FROM VOCABULARY_CONVERSION "
+        . " WHERE VOCABULARY_ID_V4 IN (" . implode(',', $vocabids). ") AND AVAILABLE = 'License required'";
+    $stid_license_required = oci_parse($conn, $query_license_required);
+    $result_license_required = oci_execute($stid_license_required);
+    $licensed_vocabularies = array();
+    while($row = oci_fetch_array($stid_license_required, OCI_ASSOC+OCI_RETURN_NULLS)) {
+        $idV5 = strtolower($row['VOCABULARY_ID_V5']);
+        $licensed_vocabularies[$idV5] = $row['VOCABULARY_ID_V4'];
+    }
+    if (!empty($licensed_vocabularies)) {
+        // check the user has appropriate licenses.
+        $query_check_licenses =
+            "SELECT VOCABULARY"
+            . " FROM VOCAB_DOWNLOAD.USER_LICENSE "
+            . " WHERE EMAIL_ADDRESS = '" . $email . "'";
+        $stid_check_licenses = oci_parse($conn, $query_check_licenses);
+        $result_check_licenses = oci_execute($stid_check_licenses);
+        while($row = oci_fetch_array($stid_check_licenses, OCI_ASSOC+OCI_RETURN_NULLS)) {
+            $license = trim($row['VOCABULARY']);
+            $license = strtolower($license);
+            unset($licensed_vocabularies[$license]);
+        }
+    }
+    if (!empty($licensed_vocabularies)) {
+        // user don't have some licenses
+        $vocabids = array_diff($vocabids, $licensed_vocabularies);
+        $LicensedIds = implode(',', array_values($licensed_vocabularies));
+    }
+}
 
 if(!$email || !$name || !$Organization || !$Address || !$City  || !$Country || !$Phone) {
         die("Not valid information!");
@@ -124,8 +159,9 @@ $insert_user_process_sql =
         TITLE,
         STATE,
         ZIP_CODE,
-	FILE_NAME,
-        FILE_CREATION_JOB_RUNNING_FLAG
+        FILE_NAME,
+        FILE_CREATION_JOB_RUNNING_FLAG,
+        LICENSED
     ) VALUES (
         '" . $email . "',
         '" . $name . "',
@@ -140,7 +176,8 @@ $insert_user_process_sql =
         '" . $State . "',
         '" . $Zip . "',
         '" . $FName. "',
-        'Y'
+        'Y',
+        '" . $LicensedIds . "'
     )";
 
 $stid_add_user_process = oci_parse($conn, $insert_user_process_sql);

@@ -23,7 +23,7 @@
             die;
         }
 	
-        $stid = oci_parse($conn, 'select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available, c.url, c.click_disabled from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id');
+        $stid = oci_parse($conn, 'select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available, c.url, c.click_disabled, c.latest_update from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id order by c.vocabulary_id_v4');
         if ( ! $stid ) {
             $e = oci_error($conn);
             sendErrorEmail("index.php: oci_parse select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available, c.url, c.click_disabled from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id failed, error message=" . $e['message']);
@@ -119,6 +119,7 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
 <!--<td style="text-align: center;">OMOP<br/>required</td>-->
 <td width="50%">VOCABULARY NAME</td>
 <td style="text-align: center;">Available</td>
+<td style="text-align: center">Latest update</td>
 </tr>
 <?php foreach($arVocab as $index => $item):?>
 <tr <?php if($item["OMOP_REQ"] == "Y"):?>style="display:none"<?endif;?>>
@@ -134,6 +135,7 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
 <td style="text-align: center;">
     <?php if($item["AVAILABLE"] <> "Currently not available"):?><a href="<?=$item["URL"]?>"><?=$item["AVAILABLE"]?></a><?endif;?>
     <?php if($item["AVAILABLE"] == "Currently not available"):?><?=$item["AVAILABLE"]?><?endif;?></td>
+<td style="text-align: center;"><?=$item["LATEST_UPDATE"]?></td>
 </tr>
 
 <?php endforeach;?>
