@@ -118,7 +118,7 @@ foreach($arUserProcess as $item){
                                 <p>The control files can be found <a href="'.$ctl_files_folder.'">here</a>.
                                 They are provided in the folders Oracle/, PostgreSQL/ and SQL Server/ for the respective SQL dialect. The loading scripts are inside the subfolder VocabImport/.</p>
                                 <br>
-                                <p>If you hit problems please use the <a href="http://forums.ohdsi.org/c/implementers">OHDSI Forum pages</a>, and somebody will help you. You will need to register.</p>
+                <p>If you hit problems please use the <a href="http://forums.ohdsi.org/c/implementers">OHDSI Forum pages</a>, and somebody will help you. You will need to register.</p>
                                 <p>Christian Reich and the Odysseus Vocabulary Team</p>
                                 </body>
                                 </html>
@@ -139,14 +139,14 @@ foreach($arUserProcess as $item){
             $mail = new PHPMailer;
 
             $mail->IsSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = 'smtp.mandrillapp.com';                 // Specify main and backup server
+            $mail->Host = 'email-smtp.us-east-1.amazonaws.com';   // Specify main and backup server
             $mail->Port = 587;                                    // Set the SMTP port
             $mail->SMTPAuth = true;                               // Enable SMTP authentication
             $mail->Username = $smtp_username;                     // SMTP username
             $mail->Password = $smtp_password;                     // SMTP password
             $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
 
-            $mail->From = 'no-reply@ohdsi.org';
+            $mail->From = 'evans@ohdsi.org';
             $mail->FromName = 'OMOP Vocabulary Web Site';
             $mail->AddAddress($to);                               // Recipient email address
 
@@ -179,6 +179,6 @@ foreach($arUserProcess as $item){
 }
 // free all statement identifiers and close the database connection
 oci_free_statement($stid_user_process);
-oci_free_statement($stid_update_user_process);
+//oci_free_statement($stid_update_user_process);
 oci_close($conn);
 

@@ -66,9 +66,14 @@ sub csv_dump { # (database handler, name of table
 
                 # process each field in the row to deal with diacritics
                 for ($i = 0 ; $i < $numberoffields ; $i++ ) {
-
-                                # only process field if it's value is not null
-                                if (defined($fieldarray[$i])) {
+							
+								# for CPT4 we must hide the CONCEPT_NAME
+                                if (defined($table->{is_cpt4})) {
+									$fieldarray[1]='';
+								}
+								
+								# only process field if it's value is not null
+								if (defined($fieldarray[$i])) {
 
                                         # check if field is a character type field
                                         $fieldtype  = $sth->{TYPE}->[$i];
@@ -94,7 +99,8 @@ sub csv_dump { # (database handler, name of table
                                 }
                 }
 
-                # convert null (undefined) fields into empty strings
+				
+				# convert null (undefined) fields into empty strings
                 # and join all into a single string with each field separated by a single tab character
                 $print_csv_line = join("\t", map { $_ //= '' } @fieldarray);
 
@@ -174,6 +180,16 @@ my $placeholder = join ', ', split //, '?' x @vocabularies;
 my $zip = new Archive::Zip;
 warn "Writing vocabularies ".join(',', @vocabularies)." to $output.";
 
+# check for CPT4
+my $cpt4_exists = '0';
+my $i;
+for ($i = 0 ; $i < $#vocabularies + 1; $i++ ) {
+	if ($vocabularies[$i] == 4) {
+		$cpt4_exists = '1';
+		last;
+	}
+}
+
 # Create one new table data extract file in the zip file for every database table named below
 # Each file will be in CSV format (with a single header line)
 # and will contain only the table data where the vocabulary id is in the vocabulary ids list
@@ -189,13 +205,23 @@ if ($vocabulary_version_number == 5) {
                 params => [ @vocabularies ],
         };
 
-        $zip->addFile(csv_dump($dbh, $_), sprintf('%s.csv', $_->{name})) for
+		$zip->addFile(csv_dump($dbh, $_), sprintf('%s.csv', $_->{name})) for
         {
                 name => 'CONCEPT',
-                where_clause => sprintf('WHERE VOCABULARY_ID IN (SELECT VOCABULARY_ID_V5 FROM VOCABULARY_CONVERSION WHERE VOCABULARY_ID_V4 IN (%s))', $placeholder),
+                where_clause => sprintf('WHERE VOCABULARY_ID IN (SELECT VOCABULARY_ID_V5 FROM VOCABULARY_CONVERSION WHERE VOCABULARY_ID_V4 <> 4 AND VOCABULARY_ID_V4 IN (%s))', $placeholder),
                 params => [ @vocabularies ],
         };
 
+        if ($cpt4_exists == '1') {
+			$zip->addFile(csv_dump($dbh, $_), 'concept_cpt4.csv') for
+			{
+					name => 'CONCEPT',
+					is_cpt4 => $cpt4_exists,
+					where_clause => sprintf('WHERE VOCABULARY_ID IN (SELECT VOCABULARY_ID_V5 FROM VOCABULARY_CONVERSION WHERE VOCABULARY_ID_V4 = 4 AND VOCABULARY_ID_V4 IN (%s))', $placeholder),
+					params => [ @vocabularies ],
+			};
+		}
+		
         $zip->addFile(csv_dump($dbh, $_), sprintf('%s.csv', $_->{name})) for
         {
                 name => 'CONCEPT_RELATIONSHIP',
@@ -246,6 +272,9 @@ if ($vocabulary_version_number == 5) {
                 where_clause => '',
                 params => [],
         };
+        if($cpt4_exists == '1'){
+            $zip->addTree("/home/admin/src/cpt4v5");
+        };
 
 }
 
@@ -274,9 +303,19 @@ if ($vocabulary_version_number == 4.5) {
         $zip->addFile(csv_dump($dbh, $_), sprintf('%s.csv', $_->{name})) for
         {
                 name => 'CONCEPT',
-                where_clause => sprintf('WHERE VOCABULARY_ID IN (%s)', $placeholder),
+                where_clause => sprintf('WHERE VOCABULARY_ID <> 4 AND VOCABULARY_ID IN (%s)', $placeholder),
                 params => [ @vocabularies ],
         };
+		
+        if ($cpt4_exists == '1') {
+			$zip->addFile(csv_dump($dbh, $_), 'concept_cpt4.csv') for
+			{
+					name => 'CONCEPT',
+					is_cpt4 => $cpt4_exists,
+					where_clause => sprintf('WHERE VOCABULARY_ID = 4 AND VOCABULARY_ID IN (%s)', $placeholder),
+					params => [ @vocabularies ],
+			};		
+		}
 
         $zip->addFile(csv_dump($dbh, $_), sprintf('%s.csv', $_->{name})) for
         {
@@ -312,11 +351,16 @@ if ($vocabulary_version_number == 4.5) {
                 where_clause => '',
                 params => [],
         };
+
+        if($cpt4_exists == '1'){
+            $zip->addTree("/home/admin/src/cpt4v4");
+        };
 }
 
 # write out the zip file
 die "Cannot write zip file: $!" unless $zip->writeToFileNamed($output) == Archive::Zip::AZ_OK;
-unlink $_->{externalFileName} for $zip->members;
+
+#unlink $_->{externalFileName} for $zip->members;
 
 # close the database connection
 $dbh->disconnect  or warn $dbh->errstr;

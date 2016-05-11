@@ -1,2 +1,16 @@
+# Ignore vagrant directory
+/public_html/.vagrant/*
+Vagrantfile
+
+# Ignore IDE files
 /nbproject/
+.idea
+
+# ignore vendor
+/vendor/*
+
+#ignore vocab_files
+/vocab_files/*
+
+# Ignore configs
 /public_html/include/app-config.php
