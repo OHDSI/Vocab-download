@@ -3,7 +3,7 @@
 <?php
 
 //Composer's autoload file loads all necessary files
-require '/home/admin/web/default.domain/public_html/vendor/autoload.php';
+require $root_dir . '/vendor/autoload.php';
 
 /*
  * Send email to user with download file url if the zip file job has finished since the last cron invocation

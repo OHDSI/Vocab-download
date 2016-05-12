@@ -7,6 +7,8 @@
 #
 # Lee Evans 04/02/2015
 # ---------------------------------------------------------------------------------------------------------------------
+source "${BASH_SOURCE%/*}/app-config.sh"
+
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
-find /home/admin/web/default.domain/public_html/vocab_files -type f -name vocab_download_\*.zip -mtime +3 -delete
+find "$app_root_dir/vocab_files" -type f -name vocab_download_\*.zip -mtime +3 -delete

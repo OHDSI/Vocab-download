@@ -1,9 +1,10 @@
 <?php
 
 function sendErrorEmail() {
-
+    
+    global $root_dir;
     //Composer's autoload file loads all necessary files
-    require '/home/admin/web/default.domain/public_html/vendor/autoload.php';
+    require $root_dir . '/vendor/autoload.php';
 
     global $SERVER_NAME;
     global $smtp_username;

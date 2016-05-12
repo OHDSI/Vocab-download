@@ -14,3 +14,4 @@ Vagrantfile
 
 # Ignore configs
 /public_html/include/app-config.php
+/public_html/include/app-config.sh
