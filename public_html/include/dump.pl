@@ -213,7 +213,7 @@ if ($vocabulary_version_number == 5) {
         };
 
         if ($cpt4_exists == '1') {
-			$zip->addFile(csv_dump($dbh, $_), 'concept_cpt4.csv') for
+			$zip->addFile(csv_dump($dbh, $_), 'CONCEPT_CPT4.csv') for
 			{
 					name => 'CONCEPT',
 					is_cpt4 => $cpt4_exists,
@@ -308,7 +308,7 @@ if ($vocabulary_version_number == 4.5) {
         };
 		
         if ($cpt4_exists == '1') {
-			$zip->addFile(csv_dump($dbh, $_), 'concept_cpt4.csv') for
+			$zip->addFile(csv_dump($dbh, $_), 'CONCEPT_CPT4.csv') for
 			{
 					name => 'CONCEPT',
 					is_cpt4 => $cpt4_exists,
