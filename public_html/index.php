@@ -42,6 +42,19 @@
 	while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
             $arVocab[] = $row;
 	}
+
+    $versions = array();
+    $version4_id = oci_parse($conn, 'SELECT p4.VOCABULARY_NAME FROM PRODV4.VOCABULARY p4 WHERE VOCABULARY_ID = 0');
+    if ($version4_id && oci_execute($version4_id) && $row = oci_fetch_array($version4_id, OCI_ASSOC+OCI_RETURN_NULLS)) {
+        $versions[] = $row['VOCABULARY_NAME'];
+    }
+    $version5_id = oci_parse($conn, 'SELECT VOCABULARY_NAME FROM VOCABULARY WHERE VOCABULARY_ID = \'None\'');
+    if ($version5_id && oci_execute($version5_id) && $row = oci_fetch_array($version5_id, OCI_ASSOC+OCI_RETURN_NULLS)) {
+        $versions[] = $row['VOCABULARY_NAME'];
+    }
+    $versions = array_map(function($name) {
+        return '<i>' . htmlspecialchars($name) . '</i>';
+    }, $versions);
   }
   // free all statement identifiers and close the database connection
 oci_free_statement($stid1);
@@ -56,6 +69,9 @@ oci_close($conn);
         <em class = "corner corner-bottom corner-left"></em>
         <em class = "corner corner-bottom corner-right"></em>
         <h2>Fill out the form, pick the required vocabularies and select the right version</h2>
+        <?php if (!empty($versions)): ?>
+        <h4>Vocabulary versions <?php echo implode(' and ', $versions) ?></h4>
+        <?php endif; ?>
         <form id="register_form" enctype="application/x-www-form-urlencoded" method="post" class="generic-form" action="downloads.php">
 <div class="input-block">
 <input type="hidden" name="docname" value="Vocabulary Data CSV V4" id="docname">

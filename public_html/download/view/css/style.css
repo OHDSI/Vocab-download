@@ -241,6 +241,13 @@ h3
     padding-bottom: 20px;
 }
 
+h4 {
+  color: #6C6B73;
+  font-size: 14px;
+  text-align: left;
+  padding: 10px 50px 40px;
+}
+
 div.registration-form
 {
     font-family: sans-serif;
