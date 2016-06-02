@@ -48,12 +48,12 @@
     if ($version4_id && oci_execute($version4_id) && $row = oci_fetch_array($version4_id, OCI_ASSOC+OCI_RETURN_NULLS)) {
         $versions[] = $row['VOCABULARY_NAME'];
     }
-    $version5_id = oci_parse($conn, 'SELECT VOCABULARY_NAME FROM VOCABULARY WHERE VOCABULARY_ID = \'None\'');
+    $version5_id = oci_parse($conn, 'SELECT VOCABULARY_VERSION FROM VOCABULARY WHERE VOCABULARY_ID = \'None\'');
     if ($version5_id && oci_execute($version5_id) && $row = oci_fetch_array($version5_id, OCI_ASSOC+OCI_RETURN_NULLS)) {
-        $versions[] = $row['VOCABULARY_NAME'];
+        $versions[] = $row['VOCABULARY_VERSION'];
     }
     $versions = array_map(function($name) {
-        return '<i>' . htmlspecialchars($name) . '</i>';
+        return '<i>“' . htmlspecialchars($name) . '”</i>';
     }, $versions);
   }
   // free all statement identifiers and close the database connection
