@@ -23,6 +23,10 @@ use DBI qw( :sql_types );
 use POSIX;
 use Archive::Zip;
 use Text::Unidecode;
+use File::Basename;
+
+my $dirname = dirname(__FILE__);
+require "$dirname/app-config.pl";
 
 # Subroutines
 
@@ -273,7 +277,8 @@ if ($vocabulary_version_number == 5) {
                 params => [],
         };
         if($cpt4_exists == '1'){
-            $zip->addTree("/home/admin/src/cpt4v5");
+            our $source_cpt4v5;
+            $zip->addTree($source_cpt4v5);
         };
 
 }
@@ -353,7 +358,8 @@ if ($vocabulary_version_number == 4.5) {
         };
 
         if($cpt4_exists == '1'){
-            $zip->addTree("/home/admin/src/cpt4v4");
+            our $source_cpt4v4;
+            $zip->addTree($source_cpt4v4);
         };
 }
 
