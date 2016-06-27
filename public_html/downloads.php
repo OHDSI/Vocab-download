@@ -98,7 +98,7 @@ if (!empty($vocabids)) {
         $query_check_licenses =
             "SELECT VOCABULARY"
             . " FROM VOCAB_DOWNLOAD.USER_LICENSE "
-            . " WHERE EMAIL_ADDRESS = '" . $email . "'";
+            . " WHERE Upper(EMAIL_ADDRESS) = '" . strtoupper($email) . "'";
         $stid_check_licenses = oci_parse($conn, $query_check_licenses);
         $result_check_licenses = oci_execute($stid_check_licenses);
         while($row = oci_fetch_array($stid_check_licenses, OCI_ASSOC+OCI_RETURN_NULLS)) {
