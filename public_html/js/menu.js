@@ -69,6 +69,12 @@ $(document).ready(function(){
             current_submenu = false;
             setTimeout(update_submenus, menu_delay);
     });
+
+    $('.check-all').click(function() {
+        var checkboxes = $(this).closest('table').find('[type="checkbox"]:enabled');
+        checkboxes.attr('checked', 'checked');
+    });
+
 });
 
 function update_submenus ()
