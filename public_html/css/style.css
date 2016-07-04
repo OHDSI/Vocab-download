@@ -959,3 +959,34 @@ form.generic-form .multilabels label {
 table.vocabs tr:nth-child(2n) {
     background: #f0f0f0; /* Цвет фона */
 } 
+
+div.all-control {
+    position: relative;
+    height: 0;
+    margin: 2px 0 0 !important;
+}
+
+div.all-control div.links {
+    display: none;
+    position: absolute;
+    left: -7px;
+    top: 0;
+    background: #FFF;
+    border: solid 1px #AAA;
+    margin: 0;
+}
+
+.all-control .links span {
+    display: block;
+    padding: 8px 6px;
+    font-weight: normal;
+    border-bottom: solid 1px #CCC;
+    cursor: pointer;
+}
+.all-control .links span:last-child {
+    border-bottom: 0;
+}
+
+.all-control .links span:hover {
+    background: #f0f0f0;
+}

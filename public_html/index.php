@@ -129,7 +129,16 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
 
 <table style="border-collapse:collapse; margin-left: 140px; width: 88%;" class="vocabs">
 <tr style="font-weight: bold;">
-    <td><button title="Choose all undisabled checkboxes" type="button" class="check-all">All</button></td>
+    <td>
+        <button title="Choose all undisabled checkboxes" type="button" class="check-all">All</button>
+        <div class="all-control">
+            <div class="links">
+                <span data-check="true">check</span>
+                <span data-check="false">uncheck</span>
+                <span data-check="toggle">toggle</span>
+            </div>
+        </div>
+    </td>
 <td style="text-align: center;">Vocabulary ID<br/>(CDM V4.5)</td>
 <td style="text-align: center;">Vocabulary code<br/>(CDM V5)</td>
 <!--<td style="text-align: center;">OMOP<br/>required</td>-->

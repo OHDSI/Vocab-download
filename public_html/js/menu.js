@@ -71,8 +71,20 @@ $(document).ready(function(){
     });
 
     $('.check-all').click(function() {
+        $('.all-control .links').slideToggle(200);
+    });
+
+    $('.all-control .links span').click(function() {
         var checkboxes = $(this).closest('table').find('[type="checkbox"]:enabled');
-        checkboxes.attr('checked', 'checked');
+        var operation = $(this).data('check');
+        if (operation === true) {
+            checkboxes.attr('checked', 'checked');
+        } else if (operation === 'toggle') {
+            checkboxes.each(function() { this.checked = !this.checked });
+        } else {
+            checkboxes.removeAttr('checked');
+        }
+        $(this).closest('.links').hide();
     });
 
 });
