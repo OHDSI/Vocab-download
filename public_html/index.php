@@ -23,7 +23,7 @@
             die;
         }
 	
-        $stid = oci_parse($conn, 'select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available, c.url, c.click_disabled, c.latest_update from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id order by c.vocabulary_id_v4');
+        $stid = oci_parse($conn, 'select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available, c.url, c.click_disabled, c.latest_update, vc.category_id, vc.title AS category_title, vc.sort from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id left join vocabulary_categories vc on v.vocabulary_category = vc.category_id order by vc.sort, vc.category_id, v.vocabulary_name, c.vocabulary_id_v4');
         if ( ! $stid ) {
             $e = oci_error($conn);
             sendErrorEmail("index.php: oci_parse select c.click_default, c.vocabulary_id_v4, c.vocabulary_id_v5, v.vocabulary_name, c.omop_req, c.available, c.url, c.click_disabled from vocabulary_conversion c join vocabulary v on c.vocabulary_id_v5=v.vocabulary_id failed, error message=" . $e['message']);
@@ -146,7 +146,14 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
 <td style="text-align: center;">Available</td>
 <td style="text-align: center">Latest update</td>
 </tr>
-<?php foreach($arVocab as $index => $item):?>
+<?php $category_id = null; ?>
+<?php foreach($arVocab as $index => $item): ?>
+    <?php if ($item['CATEGORY_ID'] !== $category_id): ?>
+<tr>
+    <th colspan="6" class="category-header"><?= $item['CATEGORY_TITLE'] ?: 'Other' ?></th>
+</tr>
+<?php $category_id = $item['CATEGORY_ID']; ?>
+    <?php endif; ?>
 <tr <?php if($item["OMOP_REQ"] == "Y"):?>style="display:none"<?endif;?>>
 <td>
 <input type="checkbox" name="purpose[]" value="<?=$item["VOCABULARY_ID_V4"]?>" id="voc<?=$item["VOCABULARY_ID_V4"]?>" <?php if($item["CLICK_DEFAULT"] == "Y"):?>checked="checked"<?endif;?> <?php if($item["CLICK_DISABLED"] == "Y"):?>disabled="disabled"<?endif;?> />

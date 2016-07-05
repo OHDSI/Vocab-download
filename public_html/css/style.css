@@ -960,6 +960,13 @@ table.vocabs tr:nth-child(2n) {
     background: #f0f0f0; /* Цвет фона */
 } 
 
+table.vocabs td {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-size: 12px;
+    line-heght: 16px;
+}
+
 div.all-control {
     position: relative;
     height: 0;
@@ -989,4 +996,15 @@ div.all-control div.links {
 
 .all-control .links span:hover {
     background: #f0f0f0;
+}
+
+.category-header {
+    font-size: 14px;
+    padding: 10px;
+    font-weight: bold;
+    text-align: left;
+    background: #AAA;
+    color: #FFF;
+    border-top: solid 10px #FFF;
+    border-bottom: solid 1px #888;
 }
