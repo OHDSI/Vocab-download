@@ -140,9 +140,9 @@ V4.5<input name="CDMVersion" id="CDMVersion" value="4.5" type="radio">
         </div>
     </td>
 <td style="text-align: center;">Vocabulary ID<br/>(CDM V4.5)</td>
-<td style="text-align: center;">Vocabulary code<br/>(CDM V5)</td>
+<td style="text-align: center;">Vocabulary ID<br/>(CDM V5)</td>
 <!--<td style="text-align: center;">OMOP<br/>required</td>-->
-<td width="50%">VOCABULARY NAME</td>
+<td width="50%">Vocabulary name</td>
 <td style="text-align: center;">Available</td>
 <td style="text-align: center">Latest update</td>
 </tr>
